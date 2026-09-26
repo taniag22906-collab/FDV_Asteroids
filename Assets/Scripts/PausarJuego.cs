@@ -10,7 +10,6 @@ public class PausarJuego : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        Debug.Log("UPDATE");
         if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame){
             if (juegoPausado){
                 Reanudar();

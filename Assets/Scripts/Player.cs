@@ -6,10 +6,7 @@ public class Player : MonoBehaviour
     //definimos los parametros de velocidad: empuje y rotacion. Podemos editarlos en unity
     public float thrustForce = 100f;
     public float rotationSpeed = 120f;
-    
-    public GameObject gun, bulletPrefab;
-
-
+    public GameObject gun;
     private Rigidbody _rigid;
 
     public static int SCORE = 0;
@@ -36,11 +33,12 @@ public class Player : MonoBehaviour
       transform.Rotate(Vector3.forward, -rotation * rotationSpeed);
      
       if (Input.GetKeyDown(KeyCode.Space)){
-        GameObject bullet = Instantiate(bulletPrefab, gun.transform.position, Quaternion.identity);
-
+        GameObject bullet = BulletPool.Instance.RequestBullet();
+        bullet.transform.position = gun.transform.position;
+        bullet.transform.rotation = Quaternion.identity;
         Bullet balaScript = bullet.GetComponent<Bullet>();
-
         balaScript.targetVector = transform.right;
+        bullet.SetActive(true);
       }
    
     }

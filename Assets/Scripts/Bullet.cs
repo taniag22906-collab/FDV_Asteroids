@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,13 +7,16 @@ public class Bullet : MonoBehaviour
 
     public float speed = 10f;
     public float maxLifeTime = 3f;
-   public Vector3 targetVector;
-   
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        //que objeto queremos destruir
-        Destroy(gameObject, maxLifeTime);
+    public Vector3 targetVector;
+    private Coroutine lifeTimeCoroutine;
+
+    private void OnEnable(){
+        lifeTimeCoroutine = StartCoroutine(DeactivateAfterTime());
+    }
+
+    private IEnumerator DeactivateAfterTime(){
+        yield return new WaitForSeconds(maxLifeTime);
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,7 +30,7 @@ public class Bullet : MonoBehaviour
         if(collision.gameObject.tag == "Enemy"){
             IncreaseScore();
             Destroy(collision.gameObject);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
      }
      private void IncreaseScore(){
@@ -38,7 +42,7 @@ public class Bullet : MonoBehaviour
 
      private void UpdateScoreText(){
         GameObject go = GameObject.FindGameObjectWithTag("UI");
-        go.GetComponent<Text>().text = "Puntos : " + Player.SCORE;
+        go.GetComponent<Text>().text = "Puntos: " + Player.SCORE;
      }
 }
 
